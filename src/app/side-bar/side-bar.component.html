@@ -1,0 +1,46 @@
+<nav [class]="collapseSideMenu? 'sidebar' : 'sidebar active'">
+
+  <div class="sidebar-collapse-control">
+    <i (click)="toggleSideMenu()"
+       [class]="collapseSideMenu? 'sidebar-arrow glyphicon glyphicon-arrow-left' :
+          'sidebar-arrow glyphicon glyphicon-arrow-right'"></i>
+  </div>
+
+  <div class="sidebar-header">
+    <h3>Pocket PSC</h3>
+    <strong><i class="glyphicon glyphicon-home"></i></strong>
+  </div>
+
+  <ul class="list-unstyled components">
+    <li [class.active]="isActive('/papers')">
+      <a routerLink="/papers">
+        <i class="fa fa-file-text-o"></i>
+        Papers
+      </a>
+    </li>
+    <li [class.active]="isActive('/paperTypes')">
+      <a routerLink="/paperTypes">
+        <i class="fa fa-list"></i>
+        Paper Types
+      </a>
+    </li>
+    <li [class.active]="isActive('/queries')">
+      <a routerLink="/queries">
+        <i class="fa fa-question-circle"></i>
+        Queries
+      </a>
+    </li>
+    <li [class.active]="isActive('/queryTypes')">
+      <a routerLink="/queryTypes">
+        <i class="fa fa-paperclip"></i>
+        Query Types
+      </a>
+    </li>
+    <li>
+      <a href="/login">
+        <i class="fa fa-sign-out"></i>
+        Logout
+      </a>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,37 @@
+<div>
+  <ngx-datatable
+    class="material"
+    [rows]="rows"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'">
+    <ngx-datatable-column name="Name"></ngx-datatable-column>
+    <ngx-datatable-column name="Short Name"></ngx-datatable-column>
+    <ngx-datatable-column name="Associated Tests"></ngx-datatable-column>
+    <ngx-datatable-column [sortable]="false" [width]="10">
+      <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+        Actions
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" (click)="openEditModal(row)"><i class="fa fa-pencil"></i></button>
+          <button type="button" class="btn btn-default"
+                  (click)="openConfirmDeleteModal(confirm, row)"
+                  [disabled]="row.associatedTests > 0"
+                  [title]="row.associatedTests > 0 ? 'Cannot be deleted as there are associations' : ''">
+            <i class="fa fa-trash-o"></i>
+          </button>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+<ng-template #confirm>
+  <div class="modal-body text-center">
+    <p>Do you want to confirm?</p>
+    <button type="button" class="btn btn-default" (click)="confirmDelete()" >Yes</button>
+    <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()" >No</button>
+  </div>
+</ng-template>

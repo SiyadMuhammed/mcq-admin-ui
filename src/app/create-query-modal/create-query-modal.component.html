@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Create Question</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span>&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" (submit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="category">Choose Category</label>
+        <select id="category" class="form-control"
+                formControlName="category" [class.error]="isFieldValid('category')">
+          <option></option>
+          <option *ngFor="let option of categories">{{option}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question">Question</label>
+        <textarea type="text" class="form-control" id="question" placeholder="Question..."
+                  formControlName="question" [class.error]="isFieldValid('question')"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="answer">Answer</label>
+      <input class="form-control" id="answer" placeholder="Answer..."
+             formControlName="answer" [class.error]="isFieldValid('answer')">
+    </div>
+    <label>Other Options</label>
+    <div class="form-group">
+      <input class="form-control" formControlName="option1" [class.error]="isFieldValid('option1')"
+             placeholder="Do not leave empty">
+    </div>
+    <div class="form-group">
+      <input class="form-control" formControlName="option2">
+    </div>
+    <div class="form-group">
+      <input class="form-control" formControlName="option3">
+    </div>
+    <div class="form-group">
+      <small class="form-text text-muted">At least one extra option should be there</small>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+  <button class="btn btn-primary" (click)="onSubmit()">Done</button>
+  <button class="btn btn-primary" (click)="onSubmit()">Create Another</button>
+</div>
+

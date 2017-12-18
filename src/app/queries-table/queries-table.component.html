@@ -1,0 +1,47 @@
+<ngx-datatable
+  class="material striped"
+  [rows]="questions"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'">
+  <ngx-datatable-column name="Question" [width]="500">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      Question
+    </ng-template>
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <span>{{ value }}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Options" [width]="500">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      <span>Options</span>
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <div *ngFor="let option of value; let i = index">
+        <span *ngIf="option === row.answer;then answer else other_option"></span>
+        <ng-template #answer><strong>{{ i + 1 }} - {{ option }}</strong></ng-template>
+        <ng-template #other_option>{{ i + 1 }} - {{ option }}</ng-template>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column [sortable]="false" [width]="50">
+    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+      Actions
+    </ng-template>
+    <ng-template ngx-datatable-cell-template let-row="row">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default" (click)="openEditQuestionModel(row)"><i class="fa fa-pencil"></i></button>
+        <button type="button" class="btn btn-default" (click)="openConfirmDeleteModal(confirm, row)"><i class="fa fa-trash-o"></i></button>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>
+
+<ng-template #confirm>
+  <div class="modal-body text-center">
+    <p>Do you want to confirm?</p>
+    <button type="button" class="btn btn-default" (click)="confirmDelete()" >Yes</button>
+    <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()" >No</button>
+  </div>
+</ng-template>
