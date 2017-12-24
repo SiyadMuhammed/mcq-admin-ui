@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'paperTypes', component: PaperTypesComponent },
   { path: 'queries', component: QueriesComponent },
   { path: 'queryTypes', component: QueryTypesComponent },
-  { path: 'managePaper', component: ManagePaperComponent },
+  { path: 'managePaper/:id', component: ManagePaperComponent },
   { path: 'login', component: LoginComponent }
 ];
 

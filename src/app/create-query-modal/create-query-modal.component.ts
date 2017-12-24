@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { QueryTypeService } from '../services/query-type-service';
+import { QueryService } from '../services/query-service';
+import { QueryCategory } from '../models/queryCategory';
+import { Query } from '../models/query';
 
 @Component({
   selector: 'app-create-query-modal',
@@ -10,22 +14,36 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class CreateQueryModalComponent implements OnInit {
   private formSubmitAttempt: boolean;
   form;
-  categories: [string];
+  paperId = '';
+  categories: Array<QueryCategory>;
 
   constructor(public bsModalRef: BsModalRef,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private queryTypeService: QueryTypeService,
+              private queryService: QueryService) {
+    this.queryTypeService.getAll().subscribe(val => this.categories = val);
+  }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      category: ['', Validators.required ],
+    this.form = this.getNewForm(this.paperId);
+  }
+
+  supplyPaperId (id) {
+    this.paperId = id;
+    this.form = this.getNewForm(this.paperId);
+  }
+
+  getNewForm (paperId: string) {
+    return this.formBuilder.group({
+      id: [''],
+      categoryId: ['', Validators.required ],
+      paperId: [paperId],
       question: ['', Validators.required],
       answer: ['', Validators.required],
       option1: ['', Validators.required],
       option2: [''],
       option3: ['']
     });
-    this.categories = ['General Knowledge', 'pharmaceutical', 'Engineering Physics',
-      'Computer Science', 'Astrophysics', 'Theoretical Physics', 'Microbiology'];
   }
 
   isFieldValid(field: string) {
@@ -33,10 +51,19 @@ export class CreateQueryModalComponent implements OnInit {
       (this.form.get(field).untouched && this.formSubmitAttempt);
   }
 
-  onSubmit(): void {
-    this.formSubmitAttempt = true;
-    if (this.form.valid) {
-      console.log(this.form.value);
+  onSubmit(closeModal: boolean): void {
+    const self = this;
+    self.formSubmitAttempt = true;
+    if (self.form.valid) {
+      const query = self.form.value as Query;
+      self.queryService.create(query).subscribe(() => {
+        if (closeModal) {
+          self.bsModalRef.hide();
+        } else {
+          self.formSubmitAttempt = false;
+          this.form = this.getNewForm(this.paperId);
+        }
+      });
     }
   }
 }

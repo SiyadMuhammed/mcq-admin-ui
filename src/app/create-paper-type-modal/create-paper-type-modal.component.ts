@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { PaperTypeService } from '../services/paper-type-service';
 
 @Component({
   selector: 'app-create-paper-type-modal',
@@ -13,15 +14,12 @@ export class CreatePaperTypeModalComponent implements OnInit {
   form;
 
   constructor(public bsModalRef: BsModalRef,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private paperTypeService: PaperTypeService) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
         name: ['', Validators.compose([
-          Validators.required,
-          Validators.minLength(10)
-        ])],
-        shortName: ['', Validators.compose([
           Validators.required,
           Validators.minLength(3)
         ])]
@@ -34,9 +32,13 @@ export class CreatePaperTypeModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.formSubmitAttempt = true;
-    if (this.form.valid) {
-      console.log(this.form.value);
+    const self = this;
+    self.formSubmitAttempt = true;
+    if (self.form.valid) {
+      const category = self.form.value;
+      self.paperTypeService.create(category.name).subscribe(() => {
+        self.bsModalRef.hide();
+      });
     }
   }
 

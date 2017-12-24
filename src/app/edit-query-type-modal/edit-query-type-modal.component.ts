@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { QueryTypeService } from '../services/query-type-service';
 
 @Component({
   selector: 'app-edit-query-type-modal',
@@ -13,7 +14,8 @@ export class EditQueryTypeModalComponent implements OnInit {
   form;
 
   constructor(public bsModalRef: BsModalRef,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private queryTypeService: QueryTypeService) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -37,9 +39,13 @@ export class EditQueryTypeModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.formSubmitAttempt = true;
-    if (this.form.valid) {
-      console.log(this.form.value);
+    const self = this;
+    self.formSubmitAttempt = true;
+    if (self.form.valid) {
+      const category = self.form.value;
+      self.queryTypeService.update(category.id, category.name).subscribe(() => {
+        self.bsModalRef.hide();
+      });
     }
   }
 

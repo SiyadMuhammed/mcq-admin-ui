@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,6 +27,11 @@ import { EditQueryModalComponent } from './edit-query-modal/edit-query-modal.com
 import { PapersTableComponent } from './papers-table/papers-table.component';
 import { QueriesTableComponent } from './queries-table/queries-table.component';
 
+import { QueryTypeService } from './services/query-type-service';
+import { PaperTypeService } from './services/paper-type-service';
+import { QueryService } from './services/query-service';
+import { PaperService } from './services/paper-service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +57,7 @@ import { QueriesTableComponent } from './queries-table/queries-table.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     NgxDatatableModule,
@@ -58,7 +65,12 @@ import { QueriesTableComponent } from './queries-table/queries-table.component';
     BsDropdownModule.forRoot(),
     ModalModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    QueryTypeService,
+    PaperTypeService,
+    QueryService,
+    PaperService
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     CreatePaperTypeModalComponent,

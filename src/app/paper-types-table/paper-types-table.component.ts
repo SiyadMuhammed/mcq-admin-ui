@@ -2,6 +2,10 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { EditPaperTypeModalComponent } from '../edit-paper-type-modal/edit-paper-type-modal.component';
+import { PaperTypeService } from '../services/paper-type-service';
+
+import { Filter } from '../models/filter';
+import { List } from '../models/list';
 
 @Component({
   selector: 'app-paper-types-table',
@@ -9,45 +13,32 @@ import { EditPaperTypeModalComponent } from '../edit-paper-type-modal/edit-paper
   styleUrls: ['./paper-types-table.component.css']
 })
 export class PaperTypesTableComponent implements OnInit {
-  rows = [
-    {
-      'id': '1',
-      'name': 'Lower Division Clerk',
-      'shortName': 'LDC',
-      'associatedTests': 32
-    },
-    {
-      'id': '2',
-      'name': 'Upper Division Clerk',
-      'shortName': 'UDC',
-      'associatedTests': 12
-    },
-    {
-      'id': '3',
-      'name': 'Assistant Engineer',
-      'shortName': 'AE',
-      'associatedTests': 0
-    },
-    {
-      'id': '4',
-      'name': 'Contract Stenographer',
-      'shortName': 'Steno',
-      'associatedTests': 3
-    },
-    {
-      'id': '5',
-      'name': 'Technical Assistant',
-      'shortName': 'Tech Support',
-      'associatedTests': 27
-    }
-  ];
 
+  public filter: Filter = new Filter (0, 5, 'name', 'asc');
+  public list: List = new List (0, []);
   bsModalRef: BsModalRef;
   selectedItem: any;
 
-  constructor(private modalService: BsModalService) { }
+  constructor(private modalService: BsModalService,
+              private paperTypeService: PaperTypeService) {
+    this.fetchListData();
+  }
 
   ngOnInit() {
+    this.paperTypeService.list.subscribe(val => {
+      this.list = val;
+    });
+  }
+
+  onSort (event) {
+    this.filter.sortColumn = event.column.prop;
+    this.filter.sortDirection = event.newValue;
+    this.fetchListData();
+  }
+
+  setPage(pageInfo) {
+    this.filter.offset = pageInfo.offset * this.filter.pageSize;
+    this.fetchListData();
   }
 
   openEditModal (paperType) {
@@ -61,7 +52,12 @@ export class PaperTypesTableComponent implements OnInit {
   }
 
   confirmDelete(): void {
-    this.rows.splice(this.rows.indexOf(this.selectedItem), 1);
-    this.bsModalRef.hide();
+    this.paperTypeService.delete(this.selectedItem.id).subscribe(() => {
+      this.bsModalRef.hide();
+    });
+  }
+
+  fetchListData() {
+    this.paperTypeService.fetch(this.filter).subscribe();
   }
 }

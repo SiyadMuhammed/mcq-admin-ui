@@ -1,13 +1,18 @@
 <div>
   <ngx-datatable
     class="material"
-    [rows]="rows"
+    [rows]="list.items"
     [columnMode]="'force'"
     [headerHeight]="50"
     [footerHeight]="50"
-    [rowHeight]="'auto'">
+    [rowHeight]="'auto'"
+    (sort)="onSort($event)"
+    [externalPaging]="true"
+    [count]="list.totalItems"
+    [offset]="filter.offset"
+    [limit]="filter.pageSize"
+    (page)='setPage($event)'>
     <ngx-datatable-column name="Name"></ngx-datatable-column>
-    <ngx-datatable-column name="Short Name"></ngx-datatable-column>
     <ngx-datatable-column name="Associated Tests"></ngx-datatable-column>
     <ngx-datatable-column [sortable]="false" [width]="10">
       <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">

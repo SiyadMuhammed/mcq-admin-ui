@@ -1,28 +1,26 @@
 <ngx-datatable
   class="material striped"
-  [rows]="questions"
+  [rows]="list.items"
   [columnMode]="'force'"
   [headerHeight]="50"
   [footerHeight]="50"
-  [rowHeight]="'auto'">
-  <ngx-datatable-column name="Question" [width]="500">
-    <ng-template let-column="column" ngx-datatable-header-template>
-      Question
-    </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <span>{{ value }}</span>
-    </ng-template>
-  </ngx-datatable-column>
+  [rowHeight]="'auto'"
+  (sort)="onSort($event)"
+  [externalPaging]="true"
+  [count]="list.totalItems"
+  [offset]="filter.offset"
+  [limit]="filter.pageSize"
+  (page)='setPage($event)'>
+  <ngx-datatable-column name="Question" [width]="500"></ngx-datatable-column>
   <ngx-datatable-column name="Options" [width]="500">
     <ng-template let-column="column" ngx-datatable-header-template>
       <span>Options</span>
     </ng-template>
-    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-      <div *ngFor="let option of value; let i = index">
-        <span *ngIf="option === row.answer;then answer else other_option"></span>
-        <ng-template #answer><strong>{{ i + 1 }} - {{ option }}</strong></ng-template>
-        <ng-template #other_option>{{ i + 1 }} - {{ option }}</ng-template>
-      </div>
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <div><strong>1 - {{ row.answer }}</strong></div>
+      <div>2 - {{ row.option1 }}</div>
+      <div *ngIf="row.option2">3 - {{ row.option2 }}</div>
+      <div *ngIf="row.option3">4 - {{ row.option3 }}</div>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column [sortable]="false" [width]="50">

@@ -1,7 +1,11 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { EditPaperModalComponent } from '../edit-paper-modal/edit-paper-modal.component'
+import { EditPaperModalComponent } from '../edit-paper-modal/edit-paper-modal.component';
+import { PaperService } from '../services/paper-service';
+
+import { Filter } from '../models/filter';
+import { List } from '../models/list';
 
 @Component({
   selector: 'app-papers-table',
@@ -11,60 +15,30 @@ import { EditPaperModalComponent } from '../edit-paper-modal/edit-paper-modal.co
 export class PapersTableComponent implements OnInit {
 
   bsModalRef: BsModalRef;
-  rows = [];
   selectedItem: any;
+  public filter: Filter = new Filter (0, 5, 'title', 'asc');
+  public list: List = new List (0, []);
 
-  constructor(private modalService: BsModalService) { }
+  constructor(private modalService: BsModalService,
+              private paperService: PaperService) {
+    this.fetchListData();
+  }
 
   ngOnInit() {
-    this.rows = [{
-      id: 1,
-      title: 'Accounts Officer/ Shift Supervisor',
-      year: 2011,
-      category: 'Computer Technician',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ' +
-      'aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-    },
-      {
-        id: 2,
-        title: 'Lower Division Clerk /Workshop Attender',
-        year: 2014,
-        category: 'Computer Technician',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore' +
-        ' magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-      },
-      {
-        id: 3,
-        title: 'Manager /Employment Officer',
-        year: 2009,
-        category: 'Lab Assistant',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ' +
-        'magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-      },
-      {
-        id: 4,
-        title: 'Workshop Attender/ Junior Assistant',
-        year: 2011,
-        category: 'Teachers Trainer',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et' +
-        ' dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-      },
-      {
-        id: 5,
-        title: 'Architectural Assistant/Assistant Geologist/ Junior Chemist',
-        year: 2014,
-        category: 'Lab Assistant',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna' +
-        ' aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-      },
-      {
-        id: 6,
-        title: 'Junior Instructor',
-        year: 2016,
-        category: 'Teachers Trainer',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore' +
-        ' magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-      }];
+    this.paperService.list.subscribe(val => {
+      this.list = val;
+    });
+  }
+
+  onSort (event) {
+    this.filter.sortColumn = event.column.prop;
+    this.filter.sortDirection = event.newValue;
+    this.fetchListData();
+  }
+
+  setPage(pageInfo) {
+    this.filter.offset = pageInfo.offset * this.filter.pageSize;
+    this.fetchListData();
   }
 
   openEditPaperModel (paper) {
@@ -78,8 +52,13 @@ export class PapersTableComponent implements OnInit {
   }
 
   confirmDelete(): void {
-    this.rows.splice(this.rows.indexOf(this.selectedItem), 1);
-    this.bsModalRef.hide();
+    this.paperService.delete(this.selectedItem.id).subscribe(() => {
+      this.bsModalRef.hide();
+    });
+  }
+
+  fetchListData() {
+    this.paperService.fetch(this.filter).subscribe();
   }
 
 }

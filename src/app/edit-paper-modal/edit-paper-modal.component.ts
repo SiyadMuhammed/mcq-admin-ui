@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { PaperTypeService } from '../services/paper-type-service';
+import { PaperService } from '../services/paper-service';
+import { PaperCategory } from '../models/paperCategory';
+import { Paper } from '../models/paper';
 
 @Component({
   selector: 'app-edit-paper-modal',
@@ -12,28 +16,32 @@ export class EditPaperModalComponent implements OnInit {
   private formSubmitAttempt: boolean;
   form;
   years: [number];
-  categories: [string];
+  categories: Array<PaperCategory>;
 
   constructor(public bsModalRef: BsModalRef,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private paperTypeService: PaperTypeService,
+              private paperService: PaperService) {
+    this.paperTypeService.getAll().subscribe(val => this.categories = val);
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
+      id: [''],
       year: [''],
-      category: [''],
+      categoryId: [''],
       title: [''],
       description: ['']
     });
     this.years = [2007, 2008, 2009, 2010, 2011, 2012, 2013,
       2014, 2014, 2015, 2016, 2017, 2018];
-    this.categories = ['PWD Engineer', 'KSEB Assistant Engineer', 'Computer Technician', 'Teachers Trainer',
-      'Lab Assistant', 'Police Test', 'PSC Director', 'Stenographer'];
   }
 
   updateFormValues (metadata) {
     this.form = this.formBuilder.group({
+      id: [metadata.id],
       year: [metadata.year, Validators.required ],
-      category: [metadata.category, Validators.required ],
+      categoryId: [metadata.categoryId, Validators.required ],
       title: [metadata.title, Validators.required],
       description: [metadata.description, Validators.required]
     });
@@ -45,9 +53,13 @@ export class EditPaperModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.formSubmitAttempt = true;
-    if (this.form.valid) {
-      console.log(this.form.value);
+    const self = this;
+    self.formSubmitAttempt = true;
+    if (self.form.valid) {
+      const query = self.form.value as Paper;
+      self.paperService.update(query).subscribe(() => {
+        self.bsModalRef.hide();
+      });
     }
   }
 

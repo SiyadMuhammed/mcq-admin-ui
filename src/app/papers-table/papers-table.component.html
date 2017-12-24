@@ -1,30 +1,36 @@
 <ngx-datatable
   class="material"
-  [rows]="rows"
+  [rows]="list.items"
   [columnMode]="'force'"
   [headerHeight]="50"
   [footerHeight]="50"
-  [rowHeight]="'auto'">
-
+  [rowHeight]="'auto'"
+  (sort)="onSort($event)"
+  [externalPaging]="true"
+  [count]="list.totalItems"
+  [offset]="filter.offset"
+  [limit]="filter.pageSize"
+  (page)='setPage($event)'>
   <ngx-datatable-column name="Year" [width]="20">
     <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
       <span>{{value}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="title" [width]="500">
+  <ngx-datatable-column name="title" [width]="400">
     <ng-template let-column="column" ngx-datatable-header-template>
       Title
     </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <span><a routerLink="/managePaper">{{ value }}</a></span>
+    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+      <span><a [routerLink]="'/managePaper/' + row.id">{{ value }}</a></span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="category" [width]="500">
+  <ngx-datatable-column name="Category" [width]="300"></ngx-datatable-column>
+  <ngx-datatable-column name="Publish" [width]="100">
     <ng-template let-column="column" ngx-datatable-header-template>
-      Category
+      Status
     </ng-template>
-    <ng-template let-value="value" ngx-datatable-cell-template>
-      <span>{{ value }}</span>
+    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+      {{ value ? 'Published' : 'UnPublished' }}
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column [sortable]="false" [width]="50">
