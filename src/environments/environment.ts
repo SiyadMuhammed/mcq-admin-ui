@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'https://mcq.a4i.com/api/'
+  serverUrl: 'http://mcq.a4i.com/'
 };

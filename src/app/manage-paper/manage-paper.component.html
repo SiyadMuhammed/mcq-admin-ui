@@ -1,64 +1,69 @@
-<div class="header">
-  <h2>{{ metadata.title + ' ' +  metadata.year }}</h2>
-  <a class="header-control" (click)="togglePublish()">
-    <i class="fa fa-pencil"></i> {{ metadata.publish ? 'UnPublish' : 'Publish' }}
-  </a>
+<div class="wrapper">
+  <app-side-bar></app-side-bar>
+  <div class="page-content">
+    <div class="header">
+      <h2>{{ metadata.title + ' ' +  metadata.year }}</h2>
+      <a class="header-control" (click)="togglePublish()">
+        <i class="fa fa-pencil"></i> {{ metadata.publish ? 'UnPublish' : 'Publish' }}
+      </a>
+    </div>
+
+    <div class="header">
+      <div>Total {{list.totalItems}} questions</div>
+      <a class="header-control" (click)="openCreateQueryModal()">
+        <i class="fa fa-plus"></i> Add Question
+      </a>
+    </div>
+
+    <ngx-datatable
+    class="material striped"
+    [rows]="list.items"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    (sort)="onSort($event)"
+    [externalPaging]="true"
+    [count]="list.totalItems"
+    [offset]="filter.offset"
+    [limit]="filter.pageSize"
+    (page)='setPage($event)'>
+    <ngx-datatable-column name="Index" [width]="20">
+      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+        <span>{{rowIndex + 1}}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Question" [width]="500"></ngx-datatable-column>
+    <ngx-datatable-column name="Options" [width]="500">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <span>Options</span>
+      </ng-template>
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <div><strong>1 - {{ row.answer }}</strong></div>
+        <div>2 - {{ row.option1 }}</div>
+        <div *ngIf="row.option2">3 - {{ row.option2 }}</div>
+        <div *ngIf="row.option3">4 - {{ row.option3 }}</div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column [sortable]="false" [width]="50">
+      <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+        Actions
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" (click)="openEditQuestionModel(row)"><i class="fa fa-pencil"></i></button>
+          <button type="button" class="btn btn-default" (click)="openConfirmDeleteModal(confirm, row)"><i class="fa fa-trash-o"></i></button>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+
+  <ng-template #confirm>
+    <div class="modal-body text-center">
+      <p>Do you want to confirm?</p>
+      <button type="button" class="btn btn-default" (click)="confirmDelete()" >Yes</button>
+      <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()" >No</button>
+    </div>
+  </ng-template>
 </div>
-
-<div class="header">
-  <div>Total {{list.totalItems}} questions</div>
-  <a class="header-control" (click)="openCreateQueryModal()">
-    <i class="fa fa-plus"></i> Add Question
-  </a>
 </div>
-
-<ngx-datatable
-  class="material striped"
-  [rows]="list.items"
-  [columnMode]="'force'"
-  [headerHeight]="50"
-  [footerHeight]="50"
-  [rowHeight]="'auto'"
-  (sort)="onSort($event)"
-  [externalPaging]="true"
-  [count]="list.totalItems"
-  [offset]="filter.offset"
-  [limit]="filter.pageSize"
-  (page)='setPage($event)'>
-  <ngx-datatable-column name="Index" [width]="20">
-    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-      <span>{{rowIndex + 1}}</span>
-    </ng-template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Question" [width]="500"></ngx-datatable-column>
-  <ngx-datatable-column name="Options" [width]="500">
-    <ng-template let-column="column" ngx-datatable-header-template>
-      <span>Options</span>
-    </ng-template>
-    <ng-template let-row="row" ngx-datatable-cell-template>
-      <div><strong>1 - {{ row.answer }}</strong></div>
-      <div>2 - {{ row.option1 }}</div>
-      <div *ngIf="row.option2">3 - {{ row.option2 }}</div>
-      <div *ngIf="row.option3">4 - {{ row.option3 }}</div>
-    </ng-template>
-  </ngx-datatable-column>
-  <ngx-datatable-column [sortable]="false" [width]="50">
-    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
-      Actions
-    </ng-template>
-    <ng-template ngx-datatable-cell-template let-row="row">
-      <div class="btn-group">
-        <button type="button" class="btn btn-default" (click)="openEditQuestionModel(row)"><i class="fa fa-pencil"></i></button>
-        <button type="button" class="btn btn-default" (click)="openConfirmDeleteModal(confirm, row)"><i class="fa fa-trash-o"></i></button>
-      </div>
-    </ng-template>
-  </ngx-datatable-column>
-</ngx-datatable>
-
-<ng-template #confirm>
-  <div class="modal-body text-center">
-    <p>Do you want to confirm?</p>
-    <button type="button" class="btn btn-default" (click)="confirmDelete()" >Yes</button>
-    <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()" >No</button>
-  </div>
-</ng-template>

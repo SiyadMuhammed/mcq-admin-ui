@@ -10,6 +10,8 @@ import { QueryService } from '../services/query-service';
 import { Paper } from '../models/paper';
 import { Filter } from '../models/filter';
 import { List } from '../models/list';
+import { UserService } from '../services/user-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-paper',
@@ -28,7 +30,13 @@ export class ManagePaperComponent implements OnInit {
   constructor(private modalService: BsModalService,
               private route: ActivatedRoute,
               private paperService: PaperService,
-              private queryService: QueryService) {
+              private queryService: QueryService,
+              private userService: UserService,
+              private router: Router) {
+    if(!this.userService.isAuthorized()) {
+      this.router.navigate(['login']);
+    }
+    
     this.route.params.subscribe( params => this.id = params.id);
     this.paperService.fetchById(this.id).subscribe(val => this.metadata = val);
     this.fetchListData();

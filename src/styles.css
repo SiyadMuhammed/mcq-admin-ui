@@ -34,3 +34,30 @@ input, button {
 .error, input.ng-touched.ng-invalid {
   border: solid 1px #ff0000 !important;
 }
+
+/* ---------------------------------------------------
+    WRAPPER STYLE
+----------------------------------------------------- */
+.wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+.page-content {
+  padding: 20px;
+  min-height: 100vh;
+  transition: all 0.3s;
+  width: 100%;
+  background-color: #f5f5f5;
+}
+
+/*
+    SIDE BAR STYLE
+*/
+app-side-bar {
+  background-color: #7386D5;
+}

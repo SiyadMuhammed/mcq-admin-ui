@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { UserService } from './services/user-service';
+
 
 @Component({
   selector: 'app-root',
@@ -8,12 +10,9 @@ import { Location } from '@angular/common';
 })
 export class AppComponent implements OnInit {
 
-  loggedIn: boolean;
-
-  constructor(private location: Location) { }
+  constructor(private location: Location, private userService: UserService) { }
 
   ngOnInit() {
-    this.loggedIn = !(location.pathname === '/login');
   }
 
 }

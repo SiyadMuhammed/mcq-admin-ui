@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpAthClient } from './http-auth-client';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -11,12 +11,12 @@ import { Paper } from '../models/paper';
 @Injectable()
 export class PaperService {
 
-  private BASE_URL = environment.serverUrl + 'paper/';
+  private BASE_URL = environment.serverUrl + 'api/paper/';
   public filter: Filter;
   private fetchResults = new BehaviorSubject<List>(new List (0, []));
   public list: Observable<List> = this.fetchResults.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpAthClient) { }
 
 
   create(data: Paper): Observable<any> {

@@ -1,8 +1,13 @@
-<div class="header">
-  <h2>Manage Questions</h2>
-  <a class="header-control" (click)="openCreateQueryModal()">
-    <i class="fa fa-plus"></i> Add new question
-  </a>
-</div>
+<div class="wrapper">
+	<app-side-bar></app-side-bar>
+	<div class="page-content">
+		<div class="header">
+			<h2>Manage Questions</h2>
+			<a class="header-control" (click)="openCreateQueryModal()">
+				<i class="fa fa-plus"></i> Add new question
+			</a>
+		</div>
 
-<app-queries-table></app-queries-table>
+		<app-queries-table></app-queries-table>
+	</div>
+</div>

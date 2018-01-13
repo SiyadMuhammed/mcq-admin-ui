@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpAthClient } from './http-auth-client';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -11,12 +11,12 @@ import { Query } from '../models/query';
 @Injectable()
 export class QueryService {
 
-  private BASE_URL = environment.serverUrl + 'query/';
+  private BASE_URL = environment.serverUrl + 'api/query/';
   public filter: Filter;
   private fetchResults = new BehaviorSubject<List>(new List (0, []));
   public list: Observable<List> = this.fetchResults.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpAthClient) { }
 
 
   create(data: Query): Observable<any> {

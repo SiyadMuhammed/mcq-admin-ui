@@ -9,7 +9,7 @@ import { ManagePaperComponent } from './manage-paper/manage-paper.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/papers', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'papers', component: PapersComponent },
   { path: 'paperTypes', component: PaperTypesComponent },
   { path: 'queries', component: QueriesComponent },

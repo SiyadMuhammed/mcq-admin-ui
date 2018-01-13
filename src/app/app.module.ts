@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +33,8 @@ import { QueryTypeService } from './services/query-type-service';
 import { PaperTypeService } from './services/paper-type-service';
 import { QueryService } from './services/query-service';
 import { PaperService } from './services/paper-service';
+import { UserService } from './services/user-service';
+import { HttpAthClient } from './services/http-auth-client';
 
 @NgModule({
   declarations: [
@@ -69,7 +73,10 @@ import { PaperService } from './services/paper-service';
     QueryTypeService,
     PaperTypeService,
     QueryService,
-    PaperService
+    PaperService,
+    UserService,
+    HttpAthClient,
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

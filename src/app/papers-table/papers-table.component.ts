@@ -21,6 +21,7 @@ export class PapersTableComponent implements OnInit {
 
   constructor(private modalService: BsModalService,
               private paperService: PaperService) {
+    console.log('init call');
     this.fetchListData();
   }
 
@@ -33,11 +34,13 @@ export class PapersTableComponent implements OnInit {
   onSort (event) {
     this.filter.sortColumn = event.column.prop;
     this.filter.sortDirection = event.newValue;
+    console.log('sort call');
     this.fetchListData();
   }
 
   setPage(pageInfo) {
     this.filter.offset = pageInfo.offset * this.filter.pageSize;
+    console.log('page call');
     this.fetchListData();
   }
 

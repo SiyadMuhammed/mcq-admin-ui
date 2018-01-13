@@ -1,4 +1,4 @@
-<nav [class]="collapseSideMenu? 'sidebar' : 'sidebar active'">
+<nav [class]="collapseSideMenu()? 'sidebar' : 'sidebar active'">
 
   <div class="sidebar-collapse-control">
     <i (click)="toggleSideMenu()"
@@ -37,7 +37,7 @@
       </a>
     </li>
     <li>
-      <a href="/login">
+      <a routerLink="/login" (click)="logout()">
         <i class="fa fa-sign-out"></i>
         Logout
       </a>

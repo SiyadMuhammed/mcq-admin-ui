@@ -1,8 +1,13 @@
-<div class="header">
-  <h2>Manage Papers</h2>
-  <a class="header-control" (click)="openCreatePaperModalModal()">
-    <i class="fa fa-plus"></i> Create new Test
-  </a>
-</div>
+<div class="wrapper">
+	<app-side-bar></app-side-bar>
+	<div class="page-content">
+		<div class="header">
+			<h2>Manage Papers</h2>
+			<a class="header-control" (click)="openCreatePaperModalModal()">
+				<i class="fa fa-plus"></i> Create new Test
+			</a>
+		</div>
 
-<app-papers-table></app-papers-table>
+		<app-papers-table></app-papers-table>
+	</div>
+</div>
